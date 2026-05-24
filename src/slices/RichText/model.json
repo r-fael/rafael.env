@@ -1,0 +1,27 @@
+{
+  "id": "rich_text",
+  "type": "SharedSlice",
+  "name": "RichText",
+  "description": "Paragraphs, headings, lists, and inline formatting",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Rich text body",
+      "imageUrl": "",
+      "primary": {
+        "content": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Content",
+            "allowTargetBlank": true,
+            "multi": "heading2,heading3,paragraph,strong,em,hyperlink,list-item,o-list-item,preformatted"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

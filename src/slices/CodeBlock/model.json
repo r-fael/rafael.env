@@ -1,0 +1,47 @@
+{
+  "id": "code_block",
+  "type": "SharedSlice",
+  "name": "CodeBlock",
+  "description": "Fenced code block with language hint",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Code with optional language",
+      "imageUrl": "",
+      "primary": {
+        "language": {
+          "type": "Select",
+          "config": {
+            "label": "Language",
+            "placeholder": "typescript",
+            "options": [
+              "typescript",
+              "javascript",
+              "tsx",
+              "jsx",
+              "bash",
+              "json",
+              "css",
+              "html",
+              "python",
+              "go",
+              "rust",
+              "sql"
+            ]
+          }
+        },
+        "code": {
+          "type": "Text",
+          "config": {
+            "label": "Code",
+            "placeholder": "Paste code here"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

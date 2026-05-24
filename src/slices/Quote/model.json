@@ -1,0 +1,33 @@
+{
+  "id": "quote",
+  "type": "SharedSlice",
+  "name": "Quote",
+  "description": "Pull quote with optional citation",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Blockquote",
+      "imageUrl": "",
+      "primary": {
+        "quote": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Quote",
+            "allowTargetBlank": true,
+            "single": "paragraph,strong,em,hyperlink"
+          }
+        },
+        "cite": {
+          "type": "Text",
+          "config": {
+            "label": "Citation (optional)"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

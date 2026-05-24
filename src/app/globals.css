@@ -1,26 +1,358 @@
 @import "tailwindcss";
 
+/* ========================================================================
+   DESIGN TOKENS
+   ========================================================================
+   These CSS custom properties define the entire visual language of the app.
+   Tailwind v4 uses @theme to expose them as utility classes.
+   
+   WHY @theme?
+   - Tailwind v4 moved configuration from JS to CSS
+   - Custom properties defined here become available as Tailwind utilities
+   - e.g. --color-accent → bg-accent, text-accent, border-accent
+   ======================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── Background layers ── */
+  --background: #1a1b27;       /* Deep navy — main background */
+  --background-alt: #1e1f2e;   /* Slightly lighter — card backgrounds */
+  --background-elevated: #252636; /* Elevated surfaces — modals, dropdowns */
+
+  /* ── Text ── */
+  --foreground: #e4e5f1;       /* Primary text — high contrast on dark */
+  --foreground-muted: #9ca3af; /* Secondary text — descriptions, captions */
+  --foreground-subtle: #6b7280; /* Tertiary text — timestamps, metadata */
+
+  /* ── Accent colors (inspired by craftz.dog) ── */
+  --accent: #81e6d9;           /* Teal — primary accent (links, buttons) */
+  --accent-hover: #5fd4c4;     /* Teal darker — hover state */
+  --accent-subtle: rgba(129, 230, 217, 0.12); /* Teal ghost — subtle backgrounds */
+  --highlight: #ff63c3;        /* Pink — highlight / attention */
+  --highlight-hover: #ff4db8;  /* Pink darker — hover state */
+
+  /* ── Borders & dividers ── */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.16);
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(129, 230, 217, 0.15);
+
+  /* ── Spacing (consistent rhythm) ── */
+  --section-gap: 4rem;
+  --content-padding: 1.5rem;
+
+  /* ── Transitions ── */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease-in-out;
+
+  /* ── Border radius ── */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
 }
 
+/* ── Expose design tokens to Tailwind v4 ── */
 @theme inline {
+  /* Colors */
   --color-background: var(--background);
+  --color-background-alt: var(--background-alt);
+  --color-background-elevated: var(--background-elevated);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-subtle: var(--foreground-subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-highlight: var(--highlight);
+  --color-highlight-hover: var(--highlight-hover);
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+
+  /* Fonts */
+  --font-sans: var(--font-inter);
+
+  /* Shadows */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-glow: var(--shadow-glow);
+
+  /* Border radius */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-full: var(--radius-full);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ========================================================================
+   BASE STYLES
+   ======================================================================== */
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Smooth scrolling (respects reduced motion) ── */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
 
-body {
+/* ── Selection color ── */
+::selection {
+  background-color: var(--accent-subtle);
+  color: var(--accent);
+}
+
+/* ── Focus ring (accessibility) ── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Scrollbar styling (webkit) ── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
   background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--foreground-subtle);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground-muted);
+}
+
+/* ========================================================================
+   PROSE — Blog post typography
+   ========================================================================
+   Custom prose styles for the SliceZone content. We don't use the
+   @tailwindcss/typography plugin — instead we scope everything under
+   `.prose-custom` for full control over colors, spacing, and font sizes.
+
+   WHY NOT `@layer`?
+   Tailwind v4 puts its utilities in `@layer utilities`. Unlayered CSS
+   always beats layered CSS in the cascade, so our rules here naturally
+   override Tailwind's reset *and* any utility classes that sneak in.
+   ======================================================================== */
+
+.prose-custom {
+  line-height: 1.8;
+  font-size: 1rem;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ── Spacing between SliceZone sections ──
+   Each slice renders inside a `<section>`. Without explicit spacing
+   between them the content blocks would collapse together. */
+.prose-custom > section + section {
+  margin-top: 0.25rem;
+}
+
+/* ── Headings ── */
+.prose-custom h1 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+
+.prose-custom h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+
+.prose-custom h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--foreground);
+}
+
+.prose-custom h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--foreground);
+}
+
+/* Remove top margin when heading is the first element */
+.prose-custom > :first-child,
+.prose-custom section:first-child > :first-child {
+  margin-top: 0;
+}
+
+/* ── Paragraphs ── */
+.prose-custom p {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  color: var(--foreground);
+}
+
+.prose-custom p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Links ── */
+.prose-custom a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
+}
+
+.prose-custom a:hover {
+  color: var(--accent-hover);
+}
+
+/* ── Lists ── */
+.prose-custom ul,
+.prose-custom ol {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.prose-custom ul {
+  list-style-type: disc;
+}
+
+.prose-custom ol {
+  list-style-type: decimal;
+}
+
+.prose-custom li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-custom li::marker {
+  color: var(--foreground-subtle);
+}
+
+/* ── Preformatted text / code blocks ──
+   PrismicRichText renders <pre> for preformatted content inside
+   RichText slices. This rule catches those — the dedicated CodeBlock
+   slice has its own styling via [data-slice-type]. */
+.prose-custom pre {
+  background-color: var(--background-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--foreground);
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+  tab-size: 2;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+/* ── Inline code ── */
+.prose-custom :not(pre) > code {
+  background-color: var(--background-elevated);
+  color: var(--accent);
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-sm);
+  font-size: 0.875em;
+  font-weight: 500;
+}
+
+/* ── Horizontal rules ── */
+.prose-custom hr {
+  margin: 2rem 0;
+  border-color: var(--border);
+}
+
+/* ── Strong / emphasis ── */
+.prose-custom strong {
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.prose-custom em {
+  font-style: italic;
+}
+
+/* ── Images within prose ── */
+.prose-custom img {
+  border-radius: var(--radius-lg);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Blockquotes (Quote slice provides its own styling, but
+   PrismicRichText may render inline blockquotes too) ── */
+.prose-custom blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: var(--foreground-muted);
+  font-style: italic;
+}
+
+/* ========================================================================
+   CODE BLOCK — syntax styling
+   ========================================================================
+   Minimal dark-themed code blocks. Syntax highlighting can be layered
+   on later with Shiki or Prism; these base styles ensure code blocks
+   look great even without a highlighter.
+   ======================================================================== */
+
+[data-slice-type="code_block"] pre {
+  position: relative;
+  background-color: var(--background-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--foreground);
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+[data-slice-type="code_block"] code {
+  font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', ui-monospace, monospace;
+  font-size: inherit;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+  tab-size: 2;
 }
