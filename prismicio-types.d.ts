@@ -88,7 +88,8 @@ type BlogPostDocumentDataBodySlice =
   | RichTextSlice
   | CodeBlockSlice
   | ImageBlockSlice
-  | QuoteSlice;
+  | QuoteSlice
+  | ChecklistSlice;
 
 /**
  * Content for Blog Post documents
@@ -305,6 +306,87 @@ export type ProjectDocument<Lang extends string = string> =
   >;
 
 export type AllDocumentTypes = BlogPostDocument | ProjectDocument;
+
+/**
+ * Item in *Checklist → Default → Primary → Items*
+ */
+export interface ChecklistSliceDefaultPrimaryItemsItem {
+  /**
+   * Label field in *Checklist → Default → Primary → Items*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Item text
+   * - **API ID Path**: checklist.default.primary.items[].label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  label: prismic.KeyTextField;
+
+  /**
+   * Checked field in *Checklist → Default → Primary → Items*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: checklist.default.primary.items[].checked
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  checked: prismic.BooleanField;
+}
+
+/**
+ * Primary content in *Checklist → Default → Primary*
+ */
+export interface ChecklistSliceDefaultPrimary {
+  /**
+   * Title (optional) field in *Checklist → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Checklist title
+   * - **API ID Path**: checklist.default.primary.title
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * Items field in *Checklist → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: checklist.default.primary.items[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  items: prismic.GroupField<Simplify<ChecklistSliceDefaultPrimaryItemsItem>>;
+}
+
+/**
+ * Default variation for Checklist Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Checklist
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ChecklistSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<ChecklistSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Checklist*
+ */
+type ChecklistSliceVariation = ChecklistSliceDefault;
+
+/**
+ * Checklist Shared Slice
+ *
+ * - **API ID**: `checklist`
+ * - **Description**: Task list with checked / unchecked items
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ChecklistSlice = prismic.SharedSlice<
+  "checklist",
+  ChecklistSliceVariation
+>;
 
 /**
  * Primary content in *CodeBlock → Default → Primary*
@@ -556,6 +638,11 @@ declare module "@prismicio/client" {
       ProjectDocumentDataTagsItem,
       ProjectDocumentDataSlicesSlice,
       AllDocumentTypes,
+      ChecklistSlice,
+      ChecklistSliceDefaultPrimaryItemsItem,
+      ChecklistSliceDefaultPrimary,
+      ChecklistSliceVariation,
+      ChecklistSliceDefault,
       CodeBlockSlice,
       CodeBlockSliceDefaultPrimary,
       CodeBlockSliceVariation,

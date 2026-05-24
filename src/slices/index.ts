@@ -13,4 +13,5 @@ export const components = {
   code_block: dynamic(() => import('./CodeBlock')),
   image_block: dynamic(() => import('./ImageBlock')),
   quote: dynamic(() => import('./Quote')),
+  checklist: dynamic(() => import('./Checklist')),
 }

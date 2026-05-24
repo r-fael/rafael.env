@@ -1,0 +1,50 @@
+{
+  "id": "checklist",
+  "type": "SharedSlice",
+  "name": "Checklist",
+  "description": "Task list with checked / unchecked items",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Checklist",
+      "imageUrl": "",
+      "primary": {
+        "title": {
+          "type": "Text",
+          "config": {
+            "label": "Title (optional)",
+            "placeholder": "Checklist title"
+          }
+        },
+        "items": {
+          "type": "Group",
+          "config": {
+            "label": "Items",
+            "fields": {
+              "label": {
+                "type": "Text",
+                "config": {
+                  "label": "Label",
+                  "placeholder": "Item text"
+                }
+              },
+              "checked": {
+                "type": "Boolean",
+                "config": {
+                  "label": "Checked",
+                  "default_value": false,
+                  "placeholder_false": "To do",
+                  "placeholder_true": "Done"
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

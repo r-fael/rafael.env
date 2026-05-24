@@ -356,3 +356,69 @@ body {
   word-wrap: normal;
   tab-size: 2;
 }
+
+/* ========================================================================
+   CHECKLIST — task-list slice
+   ========================================================================
+   The slice renders inside `.prose-custom`, so we override the default
+   list styling (disc bullets + indent + item margins) and draw a faux
+   checkbox. The component sets `data-checked` on each <li>; all visual
+   state is driven from here so the React component stays presentation-free.
+   ======================================================================== */
+
+[data-slice-type="checklist"] .checklist__title {
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+[data-slice-type="checklist"] ul {
+  list-style: none;        /* override .prose-custom ul (disc) */
+  margin: 0;
+  padding: 0;              /* override .prose-custom ul (indent) */
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+[data-slice-type="checklist"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 0;               /* override .prose-custom li (bottom margin) */
+  color: var(--foreground);
+}
+
+/* ── Faux checkbox ── */
+[data-slice-type="checklist"] .checklist__box {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.15rem;     /* optical-align with the first line of text */
+  border: 1.5px solid var(--border-hover);
+  border-radius: var(--radius-sm);
+  background-color: var(--background-elevated);
+  color: var(--background);
+  transition: background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+[data-slice-type="checklist"] .checklist__icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* ── Checked state ── */
+[data-slice-type="checklist"] li[data-checked="true"] .checklist__box {
+  border-color: var(--accent);
+  background-color: var(--accent);
+}
+
+[data-slice-type="checklist"] li[data-checked="true"] .checklist__label {
+  color: var(--foreground-muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--foreground-subtle);
+}
