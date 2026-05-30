@@ -113,7 +113,7 @@ export default async function BlogPostPage({
                     className="inline-flex items-center gap-1.5 text-sm text-foreground-muted transition-colors hover:text-accent"
                 >
                     <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-                    Back to all posts
+                    Back to blog
                 </Link>
             </article>
         </Container>

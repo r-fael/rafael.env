@@ -33,10 +33,13 @@ function toBlogPost(doc: BlogPostDocument): BlogPost & { body: BlogPostDocument[
 export async function getAllPosts(lang: string = '*') {
   const client = createClient()
   try {
-    const docs = await client.getAllByType<BlogPostDocument>('blog_post', {
+    let docs = await client.getAllByType<BlogPostDocument>('blog_post', {
       lang,
-      orderings: [{ field: 'my.blog_post.date', direction: 'desc' }],
+      orderings: [{ field: 'my.blog_post.date' }],
     })
+
+    // sort by the latest post because ordering direction was not working
+    docs = docs.sort((a, b) => new Date(b.first_publication_date).getTime() - new Date(a.first_publication_date).getTime())
     return docs.map(toBlogPost)
   } catch (error) {
     console.warn('[lib/blog] getAllPosts failed; returning empty array.', error)

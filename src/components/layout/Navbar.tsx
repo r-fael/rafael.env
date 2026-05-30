@@ -36,6 +36,16 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
+  const getClass = (item: NavItem): string => {
+    console.log(item.href, pathname)
+    return cn(
+      'rounded-lg px-4 py-2 text-sm font-medium transition-colors',
+      pathname.includes(item.href)
+        ? 'bg-accent-subtle text-accent'
+        : 'text-foreground-muted hover:bg-accent-subtle hover:text-accent'
+    )
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <Container>
@@ -57,12 +67,7 @@ export function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={cn(
-                    'rounded-lg px-4 py-2 text-sm font-medium transition-colors',
-                    pathname === item.href
-                      ? 'bg-accent-subtle text-accent'
-                      : 'text-foreground-muted hover:bg-accent-subtle hover:text-accent'
-                  )}
+                  className={getClass(item)}
                 >
                   {item.label}
                 </Link>

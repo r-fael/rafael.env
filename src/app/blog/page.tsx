@@ -38,7 +38,7 @@ export default async function BlogPage() {
                         </div>
                         <p className="text-lg font-medium text-foreground">No posts yet</p>
                         <p className="max-w-sm text-sm text-foreground-muted">
-                            Blog posts will appear here once published in the CMS.
+                            Blog posts will appear here once I publish them.
                             Check back soon!
                         </p>
                     </div>
